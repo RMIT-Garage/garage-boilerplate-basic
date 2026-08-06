@@ -23,7 +23,7 @@ export async function createNote(input: unknown): Promise<ActionResult<string>> 
     const now = Timestamp.now()
     const ref = await adminDb.collection('notes').add({
       ...parsed.data,
-      uid: session.uid,s
+      uid: session.uid,
       createdAt: now,
       updatedAt: now,
       _schemaVersion: 1,
