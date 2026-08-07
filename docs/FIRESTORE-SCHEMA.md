@@ -47,3 +47,17 @@ This enables **lazy migration** — when a document is read, check `_schemaVersi
 ---
 
 <!-- Add new collection schemas below using the /firebase-collection skill -->
+
+## `notes` collection
+
+**Path:** `/notes/{noteId}`
+**Access:** Owner-only (user can only read/write their own note)
+
+| Field | Type | Required | Description |
+| `id` | `string` | Yes | Note ID |
+| `uid` | `string` | Yes | Firebase Auth UID (same as document ID) |
+| `title` | `string` | Yes | Note title |
+| `body` | `string` | Yes | Note body |
+| `createdAt` | `Timestamp` | Yes | When the note was created |
+| `updatedAt` | `Timestamp` | Yes | When the note was last updated |
+| `_schemaVersion` | `1` | Yes | Schema version for lazy migration |
