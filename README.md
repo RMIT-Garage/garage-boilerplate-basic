@@ -127,6 +127,8 @@ pnpm run validate         # Check for unreplaced template placeholders
 
 Security is enforced in independent layers — Claude Code guard hooks, HTTP hardening (helmet/CORS/rate limits), token + session-cookie auth, Zod input validation, default-deny Firestore rules, and CI scanning (`pnpm audit`). See [docs/SECURITY.md](docs/SECURITY.md).
 
+Transitive `pnpm audit` findings that can't be fixed by bumping a direct dependency are pinned via `overrides` in [`pnpm-workspace.yaml`](pnpm-workspace.yaml) (e.g. `js-yaml`, `nanoid` — both dev/build-time only, patched to their fixed versions).
+
 ## Git Workflow
 
 | Branch | Purpose |
