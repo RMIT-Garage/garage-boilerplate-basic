@@ -1,7 +1,19 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+  
+    match /notes/{noteId} {
+  allow read: if isAuthenticated() && isOwner(resource.data.uid);
 
+  allow create: if isAuthenticated()
+                && isOwner(request.resource.data.uid);
+
+  allow update: if isAuthenticated()
+                && isOwner(resource.data.uid)
+                && request.resource.data.uid == resource.data.uid;
+
+  allow delete: if false;
+}
     // ── Helper functions ───────────────────────────────────────────────────
 
     function isAuthenticated() {
