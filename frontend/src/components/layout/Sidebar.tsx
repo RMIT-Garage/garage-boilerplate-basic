@@ -1,8 +1,9 @@
 import Link from 'next/link'
-import { LayoutDashboard, User, Settings } from 'lucide-react'
+import { LayoutDashboard, StickyNote, User, Settings } from 'lucide-react'
 
 const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { href: '/notes', label: 'Notes', icon: StickyNote },
   { href: '/profile', label: 'Profile', icon: User },
   { href: '/settings', label: 'Settings', icon: Settings },
 ]
@@ -15,6 +16,7 @@ export function Sidebar() {
           {process.env.NEXT_PUBLIC_APP_NAME ?? 'App'}
         </span>
       </div>
+
       <nav className="flex-1 p-3 space-y-1">
         {navItems.map(({ href, label, icon: Icon }) => (
           <Link
