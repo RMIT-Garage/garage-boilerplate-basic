@@ -56,6 +56,24 @@ service cloud.firestore {
       allow delete: if false; // soft-delete only — set deletedAt field instead
     }
 
+    // notes/{noteId}
+    // Reads are owner-only from the client. All writes go through the Admin SDK
+    // (createNote Server Action, POST /api/notes) which bypasses these rules —
+    // so client-direct writes are denied outright rather than re-validated here,
+    // which would only ever check field *names*, not the Zod-enforced values.
+    //
+    // list vs get: Firestore can only allow a `list` query when every field the
+    // rule reads is also constrained by the query itself. notDeleted() reads
+    // `deletedAt`, which NotesList's query doesn't filter on, so it must be left
+    // out of the `list` rule (list queries are always scoped by `uid`, which the
+    // caller cannot forge since it's checked against request.auth.uid).
+    match /notes/{noteId} {
+      allow get: if isAuthenticated() && isOwner(resource.data.uid) && notDeleted();
+      allow list: if isAuthenticated() && isOwner(resource.data.uid);
+
+      allow create, update, delete: if false;
+    }
+
     // Add new collection rules above this comment using the /firebase-collection skill.
 
     // ── Default deny ───────────────────────────────────────────────────────
