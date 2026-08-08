@@ -45,5 +45,17 @@ This enables **lazy migration** — when a document is read, check `_schemaVersi
 **Deletion:** Hard-delete is disabled in security rules. Use `deletedAt` field for soft-delete.
 
 ---
+## notes
 
+Stores user-owned notes.
+
+| Field | Type | Description |
+|---|---|---|
+| id | string | Firestore document ID |
+| uid | string | ID of the user who owns the note |
+| title | string | Note title |
+| body | string | Note content |
+| createdAt | Timestamp | When the note was created |
+| updatedAt | Timestamp | When the note was last updated |
+| _schemaVersion | number | Schema version, currently 1 |
 <!-- Add new collection schemas below using the /firebase-collection skill -->
