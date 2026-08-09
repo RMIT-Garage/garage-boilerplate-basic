@@ -1,7 +1,5 @@
 {
   "projects": {
-    "default": "REPLACE_WITH_FIREBASE_PROJECT_ID"
-  },
-  "targets": {},
-  "etags": {}
+    "default": "garage-nawres-3ae9a"
+  }
 }
