@@ -2,6 +2,12 @@ import { collection, doc, type CollectionReference, type DocumentData } from 'fi
 import { getClientDb } from './client'
 import type { UserProfile } from '@/types/firestore'
 
+import type { Note } from '@/types/firestore'
+
+export function getNotesCollection() {
+  return typedCollection<Note>('notes')
+}
+
 /**
  * Creates a typed Firestore collection reference.
  * Use this factory to add new collections — see docs/FIRESTORE-SCHEMA.md

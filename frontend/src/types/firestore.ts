@@ -1,4 +1,13 @@
 import type { Timestamp } from 'firebase/firestore'
+export interface Note {
+  id: string
+  uid: string // owner's user id — used by security rules
+  title: string
+  body: string
+  createdAt: Timestamp
+  updatedAt: Timestamp
+  _schemaVersion: 1 // every document carries this
+}
 
 /**
  * Firestore collection type definitions.
