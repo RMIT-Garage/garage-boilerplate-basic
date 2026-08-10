@@ -84,14 +84,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(getClientAuth(), async (firebaseUser) => {
       if (firebaseUser) {
-        // Treat unverified users as unauthenticated so they cannot access
-        // protected routes or receive a session cookie before verifying.
-        if (!firebaseUser.emailVerified) {
-          setUser(null)
-          setProfile(null)
-          setLoading(false)
-          return
-        }
         setUser(firebaseUser)
         const userProfile = await syncUserProfile(firebaseUser)
         setProfile(userProfile)
