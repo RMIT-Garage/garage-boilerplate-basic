@@ -5,7 +5,6 @@ import {
   GoogleAuthProvider,
   signOut as firebaseSignOut,
   sendPasswordResetEmail,
-  sendEmailVerification,
   updateProfile,
   type User,
 } from 'firebase/auth'
@@ -19,11 +18,6 @@ export async function signInWithEmail(email: string, password: string): Promise<
   const result = await signInWithEmailAndPassword(getClientAuth(), email, password)
 
   await result.user.reload()
-  if (!result.user.emailVerified) {
-    await firebaseSignOut(getClientAuth())
-    throw new Error('email-not-verified')
-  }
-
   return result.user
 }
 
@@ -35,9 +29,6 @@ export async function signUpWithEmail(
   const result = await createUserWithEmailAndPassword(getClientAuth(), email, password)
   await updateProfile(result.user, { displayName })
   await result.user.reload()
-
-  await sendEmailVerification(result.user)
-  await firebaseSignOut(getClientAuth())
 
   return result.user
 }

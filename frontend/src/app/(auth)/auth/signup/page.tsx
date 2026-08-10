@@ -42,7 +42,7 @@ export default function SignUpPage() {
   const onSubmit = async (data: SignupInput) => {
     try {
       await signUpWithEmail(data.email, data.password, data.displayName)
-      router.push('/auth/signin?verification=sent')
+      router.replace('/dashboard')
     } catch (error: unknown) {
       if (error instanceof Error && error.message.includes('email-already-in-use')) {
         toast.error('An account with this email already exists')
