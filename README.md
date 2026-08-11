@@ -129,7 +129,8 @@ pnpm run validate         # Check for unreplaced template placeholders
 
 Security is enforced in independent layers — Claude Code guard hooks, HTTP hardening (helmet/CORS/rate limits), token + session-cookie auth, Zod input validation, default-deny Firestore rules, and CI scanning (`pnpm audit`). See [docs/SECURITY.md](docs/SECURITY.md).
 
-### Known `pnpm audit` findings (manual fix) - this is to fix the PR
+### Known `pnpm audit` findings (manual fix)
+
 
 `pnpm audit` currently flags two high-severity CVEs — both transitive, dev/build-time only, not runtime-reachable:
 
@@ -193,12 +194,10 @@ See [CLAUDE.md](CLAUDE.md) for the full harness reference.
 
 ## Deployment
 
-The frontend deploys to **Vercel** (free Hobby tier, no billing account needed — this app is server-rendered, so it needs a server host, not static hosting). Firestore rules deploy automatically from CI on merge to `main`; the optional backend (Cloud Function) deploys manually and requires Firebase's paid Blaze plan. Full setup: [docs/CI-CD.md](docs/CI-CD.md).
+The frontend deploys to **Vercel** (free Hobby tier, no billing account needed — this app is server-rendered, so it needs a server host, not static hosting). 
+Use this to depoy to Vercel - [DEPLOY-TO-VERCEL.md](DEPLOY-TO-VERCEL.md)
 
-```bash
-npx firebase-tools deploy --only firestore:rules    # rules — free
-npx firebase-tools deploy --only functions          # backend — optional, requires Blaze
-```
+
 
 ## Forking for a Client Project
 
