@@ -46,17 +46,31 @@ service cloud.firestore {
         && request.resource.data.uid == request.auth.uid
         && request.resource.data.keys().hasAll(['uid', 'email', 'role', 'createdAt', 'updatedAt', '_schemaVersion'])
         && request.resource.data.keys().hasOnly(['uid', 'email', 'displayName', 'photoURL', 'role', 'createdAt', 'updatedAt', '_schemaVersion'])
-        && request.resource.data.role == 'user';  // only admin SDK can set 'admin' role
+        && request.resource.data.role == 'user';
 
       allow update: if isAuthenticated() && isOwner(userId)
-        && request.resource.data.uid == resource.data.uid    // uid is immutable
-        && request.resource.data.role == resource.data.role  // role is immutable by user
+        && request.resource.data.uid == resource.data.uid
+        && request.resource.data.role == resource.data.role
         && request.resource.data.keys().hasOnly(['uid', 'email', 'displayName', 'photoURL', 'role', 'createdAt', 'updatedAt', '_schemaVersion']);
 
-      allow delete: if false; // soft-delete only — set deletedAt field instead
+      allow delete: if false;
     }
 
-    // Add new collection rules above this comment using the /firebase-collection skill.
+    // notes/{noteId}
+    // Users can only read and write their own notes.
+    match /notes/{noteId} {
+      allow read: if isAuthenticated() && isOwner(resource.data.uid) && notDeleted();
+
+      allow create: if isAuthenticated() && isOwner(request.resource.data.uid)
+        && request.resource.data.keys().hasAll(['uid', 'title', 'body', 'createdAt', 'updatedAt', '_schemaVersion'])
+        && request.resource.data.keys().hasOnly(['uid', 'title', 'body', 'createdAt', 'updatedAt', '_schemaVersion']);
+
+      allow update: if isAuthenticated() && isOwner(resource.data.uid)
+        && request.resource.data.uid == resource.data.uid
+        && request.resource.data.keys().hasOnly(['uid', 'title', 'body', 'createdAt', 'updatedAt', 'deletedAt', '_schemaVersion']);
+
+      allow delete: if false;
+    }
 
     // ── Default deny ───────────────────────────────────────────────────────
     match /{document=**} {
