@@ -16,7 +16,6 @@ export async function getServerSession() {
   const sessionCookie = cookieStore.get(SESSION_COOKIE_NAME)?.value
 
   if (!sessionCookie) return null
-code frontend/src/features/notes/actions/notes.actions.ts
   try {
     const decoded = await adminAuth.verifySessionCookie(sessionCookie, true)
     return decoded
