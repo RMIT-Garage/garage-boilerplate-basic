@@ -23,3 +23,25 @@ export interface UserProfile {
 }
 
 export type CreateUserProfileInput = Omit<UserProfile, 'createdAt' | 'updatedAt'>
+
+export interface Note {
+  id: string
+  uid: string // owner's user id — used by security rules
+  title: string
+  body: string
+  createdAt: Timestamp
+  updatedAt: Timestamp
+  _schemaVersion: 1
+}
+
+// Team Member Profile
+export interface TeamProfile {
+  id: string
+  uid: string
+  displayName: string 
+  photoURL: string | null
+  role: string
+  blurb: string 
+  createdAt: Timestamp
+  updatedAt: Timestamp
+}

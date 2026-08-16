@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
@@ -9,10 +9,12 @@ import { toast } from 'sonner'
 import { useAuth } from '@/hooks/useAuth'
 import { loginSchema, type LoginInput } from '@/lib/validations/auth'
 import { FullPageSpinner } from '@/components/shared/LoadingSpinner'
+import { Eye, EyeOff } from 'lucide-react'
 
 export default function SignInPage() {
   const router = useRouter()
-  const { user, loading, signInWithEmail, signInWithGoogle } = useAuth()
+  const { user, loading, signInWithEmail } = useAuth()
+  const [showPassword, setShowPassword] = useState(false) // toggle for password visibility
 
   const {
     register,
@@ -24,7 +26,7 @@ export default function SignInPage() {
 
   useEffect(() => {
     if (!loading && user) {
-      router.replace('/dashboard')
+      router.replace('/teamprofile')
     }
   }, [loading, user, router])
 
@@ -41,7 +43,7 @@ export default function SignInPage() {
     try {
       await signInWithEmail(data.email, data.password)
       toast.success('Signed in successfully')
-      router.replace('/dashboard')
+      router.replace('/teamprofile')
       router.refresh()
     } catch (error: unknown) {
       if (error instanceof Error && error.message.includes('email-not-verified')) {
@@ -52,69 +54,32 @@ export default function SignInPage() {
     }
   }
 
-  const handleGoogleSignIn = async () => {
-    try {
-      await signInWithGoogle()
-      router.replace('/dashboard')
-    } catch {
-      toast.error('Google sign-in failed. Please try again.')
-    }
-  }
-
   return (
+    <div>
+      <div className="space-y-1 text-center">
+        <h2 className="text-md py-5 font-extrabold">78-Humanoid Robot Simulation in VXLab</h2>
+      </div>
+    <div className="gap-4 rounded-lg border border-zinc-200 bg-white p-10 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
     <div className="space-y-6">
       <div className="space-y-1 text-center">
-        <h1 className="text-2xl font-bold tracking-tight">Sign in</h1>
-        <p className="text-sm text-zinc-500">Enter your credentials to continue</p>
-      </div>
-
-      <button
-        type="button"
-        onClick={handleGoogleSignIn}
-        className="flex w-full items-center justify-center gap-3 rounded-md border border-zinc-300 bg-white px-4 py-2.5 text-sm font-medium shadow-sm transition-colors hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:bg-zinc-800"
-      >
-        <svg className="h-4 w-4" viewBox="0 0 24 24" aria-hidden="true">
-          <path
-            d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-            fill="#4285F4"
-          />
-          <path
-            d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-            fill="#34A853"
-          />
-          <path
-            d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-            fill="#FBBC05"
-          />
-          <path
-            d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-            fill="#EA4335"
-          />
-        </svg>
-        Continue with Google
-      </button>
-
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t border-zinc-200 dark:border-zinc-700" />
-        </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-zinc-50 px-2 text-zinc-400 dark:bg-zinc-950">or</span>
-        </div>
+        <h1 className="text-2xl font-extrabold">Welcome back</h1>
+        <p className="text-sm text-zinc-500">Enter your credentials to access your workspace</p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-1.5">
-          <label htmlFor="email" className="text-sm font-medium">
-            Email
+          <div className="flex items-center justify-between">
+          <label htmlFor="email" className="text-sm font-semibold">
+            Email address
           </label>
+          </div>
           <input
             id="email"
             type="email"
             autoComplete="email"
             aria-invalid={!!errors.email}
             aria-describedby={errors.email ? 'email-error' : undefined}
-            className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm shadow-sm placeholder:text-zinc-400 focus:ring-2 focus:ring-zinc-500 focus:outline-none aria-invalid:border-red-500 dark:border-zinc-700 dark:bg-zinc-900"
+            className="w-full rounded-md border border-zinc-300 bg-white px-3 py-3 text-sm shadow-sm placeholder:text-zinc-400 focus:ring-2 focus:ring-zinc-500 focus:outline-none aria-invalid:border-red-500 dark:border-zinc-700 dark:bg-zinc-900"
             placeholder="you@example.com"
             {...register('email')}
           />
@@ -127,20 +92,31 @@ export default function SignInPage() {
 
         <div className="space-y-1.5">
           <div className="flex items-center justify-between">
-            <label htmlFor="password" className="text-sm font-medium">
+            <label htmlFor="password" className="text-sm font-semibold">
               Password
             </label>
           </div>
+          <div className="relative">
           <input
             id="password"
-            type="password"
+            type={showPassword ? 'text' : 'password'}
             autoComplete="current-password"
             aria-invalid={!!errors.password}
             aria-describedby={errors.password ? 'password-error' : undefined}
-            className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm shadow-sm placeholder:text-zinc-400 focus:ring-2 focus:ring-zinc-500 focus:outline-none aria-invalid:border-red-500 dark:border-zinc-700 dark:bg-zinc-900"
+            className="w-full rounded-md border border-zinc-300 bg-white px-3 py-3 text-sm shadow-sm placeholder:text-zinc-400 focus:ring-2 focus:ring-zinc-500 focus:outline-none aria-invalid:border-red-500 dark:border-zinc-700 dark:bg-zinc-900"
             placeholder="••••••••"
             {...register('password')}
           />
+          <button
+              type="button"
+              onClick={() => setShowPassword((prev) => !prev)}
+              className="cursor-pointer absolute inset-y-0 right-3"
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
+              tabIndex={-1}
+            >
+              {showPassword ? <Eye size={18} /> : <EyeOff size={18} />}
+          </button>
+          </div>
           {errors.password && (
             <p id="password-error" className="text-xs text-red-500" role="alert">
               {errors.password.message}
@@ -151,21 +127,25 @@ export default function SignInPage() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full rounded-md bg-black px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-white dark:text-black dark:hover:bg-zinc-200"
+          className="cursor-pointer w-full rounded-md bg-[#5146e1] px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-white dark:text-black dark:hover:bg-zinc-200"
         >
           {isSubmitting ? 'Signing in…' : 'Sign in'}
         </button>
       </form>
-
-      <p className="text-center text-sm text-zinc-500">
-        Don&apos;t have an account?{' '}
-        <Link
-          href="/auth/signup"
-          className="font-medium text-zinc-900 hover:underline dark:text-white"
-        >
-          Create one
-        </Link>
-      </p>
+    </div>
+    
+    </div>
+    <div className="space-y-1 text-center">
+      <p className="text-center text-sm py-6 text-zinc-500">
+          Don&apos;t have an account yet?{' '}
+          <Link
+            href="/auth/signup"
+            className="font-medium text-[#5146e1] font-semibold hover:underline dark:text-white"
+          >
+            Sign up
+          </Link>
+        </p>
+      </div>
     </div>
   )
 }
