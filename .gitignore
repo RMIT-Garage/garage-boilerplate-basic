@@ -25,6 +25,8 @@ ui-debug.log
 frontend/dist/
 backend/lib/
 backend/dist/
+extension/dist/
+scanner-sandbox/dist/
 
 # Testing
 coverage/
@@ -57,3 +59,5 @@ docs/BOILERPLATE-BENCHMARK.md
 
 # Internal QA notes — not for the public repo
 docs/REPLICATION-LOG.md
+
+boilerplate-601d9-firebase-adminsdk-fbsvc-b24f9ad661.json
