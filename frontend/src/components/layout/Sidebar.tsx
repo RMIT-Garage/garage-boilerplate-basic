@@ -1,10 +1,13 @@
 import Link from 'next/link'
-import { LayoutDashboard, User, Settings } from 'lucide-react'
+import { LayoutDashboard, StickyNote, User, Settings, Users, BotMessageSquare} from 'lucide-react'
 
-const navItems = [
+export const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { href: '/notes', label: 'Notes', icon: StickyNote },
   { href: '/profile', label: 'Profile', icon: User },
   { href: '/settings', label: 'Settings', icon: Settings },
+  { href: '/team', label: 'Team', icon: Users },
+  { href: '/chatbot', label: 'Chatbot', icon: BotMessageSquare },
 ]
 
 export function Sidebar() {
