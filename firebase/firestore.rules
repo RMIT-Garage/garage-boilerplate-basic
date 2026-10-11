@@ -58,8 +58,10 @@ service cloud.firestore {
 
     // notes/{noteId}
     // Users can only read and write their own notes.
+    // No notDeleted() on read: list queries are only allowed if the query's own filters
+    // satisfy the rule, and NotesList filters on uid only — filter soft-deleted notes in the UI.
     match /notes/{noteId} {
-      allow read: if isAuthenticated() && isOwner(resource.data.uid) && notDeleted();
+      allow read: if isAuthenticated() && isOwner(resource.data.uid);
 
       allow create: if isAuthenticated() && isOwner(request.resource.data.uid)
         && request.resource.data.keys().hasAll(['uid', 'title', 'body', 'createdAt', 'updatedAt', '_schemaVersion'])
